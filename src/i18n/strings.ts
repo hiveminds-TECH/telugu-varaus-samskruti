@@ -30,7 +30,7 @@ export const strings = {
     ting: "Okko adugu, okko question. Slow ga, hayi ga.",
     en: "One question at a time. Calm and joyful.",
   },
-  startBtn: { te: "మొదలెడదాం", ting: "Let's start chesedaam", en: "Let's begin" },
+  startBtn: { te: "మొదలెడదాం", ting: "ika start chesedaam", en: "Let's begin" },
   continueBtn: {
     te: "మళ్లీ కంటిన్యూ చేద్దాం",
     ting: "Aagina chote nundi continue cheddam",

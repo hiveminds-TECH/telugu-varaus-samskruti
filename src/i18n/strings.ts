@@ -64,7 +64,7 @@ export const strings = {
   introQ: { te: "మీ పేరు చెప్పండి", ting: "Mee peru cheppandi", en: "What should we call you?" },
   introSub: {
     te: "మీ పేరుతో పిలవడం హాయి",
-    ting: "Mee peru chepte ala pilustha",
+    ting: "Mee peru chepte mee peru tho pilustham",
     en: "So we can keep this personal",
   },
   namePlaceholder: { te: "మీ పేరు", ting: "Mee peru", en: "Your name" },

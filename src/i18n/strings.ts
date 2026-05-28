@@ -54,12 +54,12 @@ export const strings = {
   sideQ: { te: "మీరు ఎవరి తరఫున?", ting: "Meeru evari taraphu?", en: "Which side are you from?" },
   sideSub: {
     te: "మీ తరఫు చెబితే మెనూ సరిగ్గా ప్లాన్ చేస్తాం",
-    ting: "Mee side cheppite menu correct ga plan cheddam",
+    ting: "Meru eyy tarapho cheppite menu correct ga plan cheddam",
     en: "Helps us plan the right menu",
   },
-  brideSide: { te: "అమ్మాయి తరఫు", ting: "Ammayi side", en: "Bride's side" },
-  groomSide: { te: "అబ్బాయి తరఫు", ting: "Abbayi side", en: "Groom's side" },
-  bothSides: { te: "రెండు వైపులా", ting: "Rendu sides", en: "Both sides" },
+  brideSide: { te: "అమ్మాయి తరఫు", ting: "Ammayi taraphu", en: "Bride's side" },
+  groomSide: { te: "అబ్బాయి తరఫు", ting: "Abbayi taraphu", en: "Groom's side" },
+  bothSides: { te: "రెండు వైపులా", ting: "Rendu vaipula", en: "Both sides" },
 
   introQ: { te: "మీ పేరు చెప్పండి", ting: "Mee peru cheppandi", en: "What should we call you?" },
   introSub: {

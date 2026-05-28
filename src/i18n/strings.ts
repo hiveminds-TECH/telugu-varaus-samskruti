@@ -38,10 +38,10 @@ export const strings = {
   },
   startFresh: { te: "కొత్తగా మొదలెట్టు", ting: "Fresh ga start cheddam", en: "Start fresh" },
 
-  occasionQ: { te: "మీది ఏ ఫంక్షన్?", ting: "Em function andi?", en: "What's the occasion?" },
+  occasionQ: { te: "మీది ఏ ఫంక్షన్?", ting: "function ento?", en: "What's the occasion?" },
   occasionSub: {
     te: "చిన్నదైనా, పెద్దదైనా — ఆనందమే ముఖ్యం",
-    ting: "Chinna ayina, peddha ayina — happiness matters",
+    ting: "Chinna function ayina, peddha functon ayina — happiness matters",
     en: "Big or small, every celebration matters",
   },
   wedding: { te: "పెళ్లి", ting: "Pelli", en: "Wedding" },

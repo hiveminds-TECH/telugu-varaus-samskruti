@@ -72,7 +72,7 @@ export const strings = {
   datesQ: { te: "ఎన్ని రోజులు ఫంక్షన్?", ting: "Enni rojulu function?", en: "Which days?" },
   datesSub: {
     te: "ఒక్కరోజైనా, వారం రోజులైనా",
-    ting: "Okka roju ayina, week ayina",
+    ting: "Okka roju ayina, 10 rojulu ayina... food lo \"no compromise\"",
     en: "One day or a whole week",
   },
   startDate: { te: "మొదటి రోజు", ting: "Start date", en: "Start date" },

@@ -124,7 +124,7 @@ export const strings = {
   reviewQ: { te: "మన ఈవెంట్ నోట్‌బుక్", ting: "Mana event notebook", en: "Your event notebook" },
   reviewSub: {
     te: "అన్నీ ఒక చోట. ఎక్కడైనా మార్చుకోవచ్చు.",
-    ting: "Anni okka chota. Ekkadaina edit cheskovachu.",
+    ting: "Anni okka chota. Ekkadaina marchukovachu cheskovachu.",
     en: "Everything in one place.",
   },
   confirmBtn: { te: "ఇవే ఫైనల్", ting: "Ivve final", en: "Confirm plan" },

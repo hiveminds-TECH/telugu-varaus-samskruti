@@ -22,7 +22,7 @@ export const strings = {
   welcomeKicker: { te: "నమస్తే 🙏", ting: "Namaskaram 🙏", en: "Welcome 🙏" },
   welcomeTitle: {
     te: "మీ వేడుక. మన ప్లానింగ్.",
-    ting: "Mee veduka. Manam kalisi plan chedam.",
+    ting: "Mee veduka. Manam kalisi plan cheddam.",
     en: "Your celebration. Planned together.",
   },
   welcomeBody: {

@@ -132,7 +132,7 @@ export const strings = {
 
   confirmTitle: { te: "హాయ్! ప్లాన్ రెడీ ✨", ting: "Super! Plan ready ✨", en: "All set ✨" },
   confirmBody: {
-    te: "మెల్లగా ప్లాన్ చేశాం. ఇప్పుడు ఎంజాయ్ చేయండి.",
+    te: "భోజనాల గురించి భయపడకండి… అది మేము చూసుకుంటాం 😄\nమీరు మిగతా పనులు చూసుకోండి ✨",
     ting: "bhojanalu gurinchi bhayapadakandi adi memu chusukuntam. meeru migilina panulu chuskondi",
     en: "We planned this together. Now go enjoy your celebration.",
   },

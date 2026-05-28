@@ -20,7 +20,7 @@ export function ChoiceCard({ selected, onClick, icon, title, subtitle, className
       whileTap={{ scale: 0.98 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
       className={cn(
-        "group flex w-full flex-col items-start gap-3 rounded-3xl bg-card p-5 text-left transition-shadow",
+        "group flex w-full flex-col items-center gap-3 rounded-3xl bg-card p-5 text-center transition-shadow",
         "hairline shadow-soft hover:shadow-lifted",
         selected && "ring-2 ring-primary ring-offset-2 ring-offset-background",
         className,
@@ -31,7 +31,7 @@ export function ChoiceCard({ selected, onClick, icon, title, subtitle, className
           {icon}
         </div>
       )}
-      <div className="flex flex-col gap-0.5">
+      <div className="flex flex-col items-center gap-0.5">
         <div className="font-display text-xl leading-tight text-foreground">{title}</div>
         {subtitle && (
           <div className="text-sm text-muted-foreground">{subtitle}</div>

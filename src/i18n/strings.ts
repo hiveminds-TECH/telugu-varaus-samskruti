@@ -78,7 +78,7 @@ export const strings = {
   startDate: { te: "మొదటి రోజు", ting: "Start date", en: "Start date" },
   endDate: { te: "చివరి రోజు", ting: "End date", en: "End date" },
 
-  mealsQ: { te: "ఏం వడ్డిద్దాం?", ting: "Em vaddidaam?", en: "What shall we serve?" },
+  mealsQ: { te: "ఏం వడ్డిద్దాం?", ting: "bhojanalu em kavalo cheppandi?", en: "What shall we serve?" },
   mealsSub: {
     te: "ప్రతి రోజు, ప్రతి భోజనం — మెల్లగా",
     ting: "Prati roju, prati meal — slow ga select cheskondi",

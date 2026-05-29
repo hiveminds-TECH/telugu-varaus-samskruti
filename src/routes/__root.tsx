@@ -76,6 +76,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "Mee function food, slow ga, hayi ga." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { property: "og:title", content: "CaterFlow" },
+      { name: "twitter:title", content: "CaterFlow" },
+      { property: "og:description", content: "Mee function food, slow ga, hayi ga." },
+      { name: "twitter:description", content: "Mee function food, slow ga, hayi ga." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/2923be01-c34b-4b18-a525-20a998103d11/id-preview-77520d41--5d0beeda-3a1f-4af9-a57e-331d948cb32a.lovable.app-1780039365201.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/2923be01-c34b-4b18-a525-20a998103d11/id-preview-77520d41--5d0beeda-3a1f-4af9-a57e-331d948cb32a.lovable.app-1780039365201.png" },
     ],
     links: [
       {

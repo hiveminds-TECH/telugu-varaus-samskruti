@@ -39,6 +39,7 @@ function VenueStep() {
   return (
     <StepShell
       kicker="Step 7"
+      step={7}
       title={t("venueQ")}
       subtitle={t("venueSub")}
       back={{ to: "/plan/guests" }}

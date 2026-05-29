@@ -119,6 +119,7 @@ function MealsStep() {
   return (
     <StepShell
       kicker="Step 5"
+      step={5}
       title={t("mealsQ")}
       subtitle={t("mealsSub")}
       back={{ to: "/plan/dates" }}
@@ -209,6 +210,8 @@ function MealsStep() {
                                 onClick={() => toggleDish(day, meal, d.id)}
                                 icon={<Icon className="h-16 w-16" />}
                                 label={pickLabel(d.label, lang)}
+                                isVeg={d.isVeg ?? true}
+                                popular={d.popular}
                               />
                             );
                           })}

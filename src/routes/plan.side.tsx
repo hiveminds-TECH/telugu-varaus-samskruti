@@ -31,6 +31,7 @@ function SideStep() {
   return (
     <StepShell
       kicker="Step 2"
+      step={2}
       title={t("sideQ")}
       subtitle={t("sideSub")}
       back={{ to: "/plan/occasion" }}

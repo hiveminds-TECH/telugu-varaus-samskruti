@@ -25,7 +25,7 @@ export function StepShell({
   next,
   skip,
   step,
-  totalSteps = 7,
+  totalSteps = 8,
 }: Props) {
   const { t } = useT();
   const pct =

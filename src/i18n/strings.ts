@@ -69,6 +69,15 @@ export const strings = {
   },
   namePlaceholder: { te: "మీ పేరు", ting: "Mee peru", en: "Your name" },
 
+  mobileQ: { te: "మీ ఫోన్ నంబర్ చెప్పండి", ting: "Mee plan save cheyyadaniki mobile number ivvandi", en: "What's your mobile number?" },
+  mobileSub: {
+    te: "మీ ప్లాన్‌ని సేవ్ చేయడానికి మరియు అప్‌డేట్‌ల కోసం",
+    ting: "Updates, reminders, aur plan save cheskondi",
+    en: "We'll send you updates and save your plan",
+  },
+  mobilePlaceholder: { te: "10-అంకెల నంబర్", ting: "10-digit number", en: "10-digit number" },
+  mobileError: { te: "10 అంకెల నంబర్ వేయండి", ting: "10-digit number chahiye", en: "Please enter 10 digits" },
+
   datesQ: { te: "ఎన్ని రోజులు ఫంక్షన్?", ting: "Enni rojulu function?", en: "Which days?" },
   datesSub: {
     te: "ఒక్కరోజైనా, వారం రోజులైనా",
@@ -152,6 +161,7 @@ export const strings = {
   occasionLabel: { te: "ఫంక్షన్", ting: "Function", en: "Occasion" },
   sideLabel: { te: "తరఫు", ting: "Side", en: "Side" },
   nameLabel: { te: "పేరు", ting: "Peru", en: "Name" },
+  mobileLabel: { te: "ఫోన్ నంబరు", ting: "Mobile", en: "Mobile" },
   datesLabel: { te: "తేదీలు", ting: "Dates", en: "Dates" },
   menuLabel: { te: "మెనూ", ting: "Menu", en: "Menu" },
   guestsLabel: { te: "అతిథులు", ting: "Guests", en: "Guests" },

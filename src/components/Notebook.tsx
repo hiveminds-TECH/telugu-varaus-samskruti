@@ -70,6 +70,7 @@ export function Notebook() {
   const checks = [
     !!p.occasion,
     !!p.name.trim(),
+    !!p.mobile.trim(),
     dates.length > 0,
     hasMenu,
     p.guests > 0,
@@ -128,6 +129,8 @@ export function Notebook() {
         ) : (
           <div>
             {p.name && <Row label={t("nameLabel")} value={p.name} />}
+            {p.mobile && <Row label={t("mobileLabel")} value={p.mobile} />}
+            {occasionLabel && <Row label={t("occasionLabel")} value={occasionLabel} />}
             {occasionLabel && <Row label={t("occasionLabel")} value={occasionLabel} />}
             {sideLabel && <Row label={t("sideLabel")} value={sideLabel} />}
             {dates.length > 0 && (

@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "react-router-dom";
 import { StepShell } from "@/components/StepShell";
 import { ChoiceCard } from "@/components/ChoiceCard";
 import { useT } from "@/hooks/useT";
@@ -10,11 +10,6 @@ import {
   TempleIcon,
   OtherIcon,
 } from "@/components/illustrations";
-
-export const Route = createFileRoute("/plan/venue")({
-  head: () => ({ meta: [{ title: "Venue — CaterFlow" }] }),
-  component: VenueStep,
-});
 
 const items: Array<{
   id: VenueType;
@@ -28,7 +23,7 @@ const items: Array<{
   { id: "other", key: "other", Icon: OtherIcon },
 ];
 
-function VenueStep() {
+export default function VenueStep() {
   const { t } = useT();
   const venueType = usePlan((s) => s.venueType);
   const setVenue = usePlan((s) => s.setVenue);
@@ -45,7 +40,7 @@ function VenueStep() {
       subtitle={t("venueSub")}
       back={{ to: "/plan/guests" }}
       next={{
-        onClick: () => navigate({ to: "/plan/review" }),
+        onClick: () => navigate("/plan/review"),
         disabled: !venueType,
       }}
     >

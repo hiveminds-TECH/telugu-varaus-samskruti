@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "react-router-dom";
 import { StepShell } from "@/components/StepShell";
 import { ChoiceCard } from "@/components/ChoiceCard";
 import { useT } from "@/hooks/useT";
@@ -11,16 +11,6 @@ import {
   CorporateIcon,
   OtherIcon,
 } from "@/components/illustrations";
-
-export const Route = createFileRoute("/plan/occasion")({
-  head: () => ({
-    meta: [
-      { title: "Pick the occasion — CaterFlow" },
-      { name: "description", content: "Tell us what you're celebrating." },
-    ],
-  }),
-  component: OccasionStep,
-});
 
 const items: Array<{
   id: Occasion;
@@ -66,7 +56,7 @@ const items: Array<{
   },
 ];
 
-function OccasionStep() {
+export default function OccasionStep() {
   const { t, lang } = useT();
   const occasion = usePlan((s) => s.occasion);
   const setOccasion = usePlan((s) => s.setOccasion);
@@ -75,7 +65,7 @@ function OccasionStep() {
   function pick(o: Occasion) {
     setOccasion(o);
     setTimeout(() => {
-      navigate({ to: o === "wedding" ? "/plan/side" : "/plan/intro" });
+      navigate(o === "wedding" ? "/plan/side" : "/plan/intro");
     }, 220);
   }
 
@@ -89,7 +79,7 @@ function OccasionStep() {
       back={{ to: "/welcome" }}
       next={{
         onClick: () =>
-          navigate({ to: occasion === "wedding" ? "/plan/side" : "/plan/intro" }),
+          navigate(occasion === "wedding" ? "/plan/side" : "/plan/intro"),
         disabled: !occasion,
       }}
     >

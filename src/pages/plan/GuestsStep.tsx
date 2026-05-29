@@ -1,14 +1,9 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "react-router-dom";
 import { StepShell } from "@/components/StepShell";
 import { useT } from "@/hooks/useT";
 import { usePlan } from "@/store/plan";
 
-export const Route = createFileRoute("/plan/guests")({
-  head: () => ({ meta: [{ title: "Guests — CaterFlow" }] }),
-  component: GuestsStep,
-});
-
-function GuestsStep() {
+export default function GuestsStep() {
   const { t } = useT();
   const guests = usePlan((s) => s.guests);
   const setGuests = usePlan((s) => s.setGuests);
@@ -35,7 +30,7 @@ function GuestsStep() {
       title={t("guestsQ")}
       subtitle={t("guestsSub")}
       back={{ to: "/plan/meals" }}
-      next={{ onClick: () => navigate({ to: "/plan/venue" }) }}
+      next={{ onClick: () => navigate("/plan/venue") }}
     >
       <div className="mx-auto flex max-w-md flex-col items-center gap-6">
         <div className="flex w-full items-center justify-center gap-4 rounded-3xl bg-card p-6 paper-grain hairline shadow-soft">

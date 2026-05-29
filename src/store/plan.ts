@@ -21,6 +21,7 @@ export interface PlanState {
   occasion: Occasion | null;
   side: Side | null;
   name: string;
+  mobile: string;
   startDate: string | null;
   endDate: string | null;
   mealsByDay: Record<string, DayMeal>;
@@ -34,6 +35,7 @@ export interface PlanState {
   setOccasion: (o: Occasion) => void;
   setSide: (s: Side) => void;
   setName: (n: string) => void;
+  setMobile: (m: string) => void;
   setDates: (start: string, end: string) => void;
   toggleDish: (date: string, meal: MealKey, dish: string) => void;
   addCustomDish: (date: string, meal: MealKey, dish: string) => void;
@@ -45,10 +47,11 @@ export interface PlanState {
 }
 
 const initial = {
-  language: "ting" as Lang,
+  language: "te" as Lang,
   occasion: null,
   side: null,
   name: "",
+  mobile: "",
   startDate: null,
   endDate: null,
   mealsByDay: {},
@@ -79,6 +82,7 @@ export const usePlan = create<PlanState>()(
         })),
       setSide: (side) => set({ side, updatedAt: Date.now() }),
       setName: (name) => set({ name, updatedAt: Date.now() }),
+      setMobile: (mobile) => set({ mobile, updatedAt: Date.now() }),
       setDates: (startDate, endDate) =>
         set({ startDate, endDate, updatedAt: Date.now() }),
       toggleDish: (date, meal, dish) =>

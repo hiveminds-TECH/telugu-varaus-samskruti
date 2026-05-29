@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useNavigate, Link } from "react-router-dom";
 import { format, parseISO } from "date-fns";
 import { StepShell } from "@/components/StepShell";
 import { useT, pickLabel } from "@/hooks/useT";
@@ -6,11 +6,6 @@ import { usePlan, datesInRange } from "@/store/plan";
 import { strings } from "@/i18n/strings";
 import { findDishLabel, mealOrder } from "@/lib/meals";
 import { Underline } from "@/components/illustrations";
-
-export const Route = createFileRoute("/plan/review")({
-  head: () => ({ meta: [{ title: "Review — CaterFlow" }] }),
-  component: ReviewStep,
-});
 
 function Section({
   label,
@@ -40,7 +35,7 @@ function Section({
   );
 }
 
-function ReviewStep() {
+export default function ReviewStep() {
   const { t, lang } = useT();
   const p = usePlan();
   const navigate = useNavigate();
@@ -53,7 +48,7 @@ function ReviewStep() {
       title={t("reviewQ")}
       subtitle={t("reviewSub")}
       back={{ to: "/plan/venue" }}
-      next={{ onClick: () => navigate({ to: "/plan/confirm" }), label: t("confirmBtn") }}
+      next={{ onClick: () => navigate("/plan/confirm"), label: t("confirmBtn") }}
     >
       <div className="flex flex-col gap-3">
         {p.name && (

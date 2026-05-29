@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { format, parseISO } from "date-fns";
 import { StepShell } from "@/components/StepShell";
@@ -21,11 +21,6 @@ import {
   SweetIcon,
   GenericDishIcon,
 } from "@/components/illustrations";
-
-export const Route = createFileRoute("/plan/meals")({
-  head: () => ({ meta: [{ title: "Meals — CaterFlow" }] }),
-  component: MealsStep,
-});
 
 const iconMap: Record<string, React.FC<React.SVGProps<SVGSVGElement>>> = {
   idli: IdliIcon,
@@ -71,7 +66,7 @@ const iconMap: Record<string, React.FC<React.SVGProps<SVGSVGElement>>> = {
   "veg-curry": ThaliIcon,
 };
 
-function MealsStep() {
+export default function MealsStep() {
   const { t, lang } = useT();
   const startDate = usePlan((s) => s.startDate);
   const endDate = usePlan((s) => s.endDate);
@@ -101,7 +96,7 @@ function MealsStep() {
       <StepShell
         title={t("mealsQ")}
         back={{ to: "/plan/dates" }}
-        next={{ onClick: () => navigate({ to: "/plan/dates" }), label: t("startDate") }}
+        next={{ onClick: () => navigate("/plan/dates"), label: t("startDate") }}
       >
         <p className="text-muted-foreground">పహిల dates select cheyandi.</p>
       </StepShell>
@@ -124,7 +119,7 @@ function MealsStep() {
       title={t("mealsQ")}
       subtitle={t("mealsSub")}
       back={{ to: "/plan/dates" }}
-      next={{ onClick: () => navigate({ to: "/plan/guests" }) }}
+      next={{ onClick: () => navigate("/plan/guests") }}
     >
       <div className="flex flex-col gap-5">
         {days.length > 1 && (

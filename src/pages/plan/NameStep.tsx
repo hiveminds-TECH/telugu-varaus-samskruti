@@ -1,14 +1,9 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "react-router-dom";
 import { StepShell } from "@/components/StepShell";
 import { useT } from "@/hooks/useT";
 import { usePlan } from "@/store/plan";
 
-export const Route = createFileRoute("/plan/intro")({
-  head: () => ({ meta: [{ title: "Name — CaterFlow" }] }),
-  component: IntroStep,
-});
-
-function IntroStep() {
+export default function NameStep() {
   const { t } = useT();
   const name = usePlan((s) => s.name);
   const setName = usePlan((s) => s.setName);
@@ -24,7 +19,7 @@ function IntroStep() {
       subtitle={t("introSub")}
       back={{ to: occasion === "wedding" ? "/plan/side" : "/plan/occasion" }}
       next={{
-        onClick: () => navigate({ to: "/plan/mobile" }),
+        onClick: () => navigate("/plan/mobile"),
         disabled: !name.trim(),
       }}
     >

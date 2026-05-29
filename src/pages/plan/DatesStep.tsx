@@ -1,19 +1,14 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "react-router-dom";
 import { StepShell } from "@/components/StepShell";
 import { useT } from "@/hooks/useT";
 import { usePlan, datesInRange } from "@/store/plan";
 import { format, parseISO } from "date-fns";
 
-export const Route = createFileRoute("/plan/dates")({
-  head: () => ({ meta: [{ title: "Dates — CaterFlow" }] }),
-  component: DatesStep,
-});
-
 function todayISO() {
   return new Date().toISOString().slice(0, 10);
 }
 
-function DatesStep() {
+export default function DatesStep() {
   const { t } = useT();
   const startDate = usePlan((s) => s.startDate);
   const endDate = usePlan((s) => s.endDate);
@@ -36,7 +31,7 @@ function DatesStep() {
       subtitle={t("datesSub")}
       back={{ to: "/plan/mobile" }}
       next={{
-        onClick: () => navigate({ to: "/plan/meals" }),
+        onClick: () => navigate("/plan/meals"),
         disabled: !startDate || !endDate || days.length === 0,
       }}
     >

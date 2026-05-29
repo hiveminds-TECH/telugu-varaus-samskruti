@@ -1,26 +1,11 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useT } from "@/hooks/useT";
 import { usePlan } from "@/store/plan";
 import { HeroIllustration, JasmineSprig, Underline } from "@/components/illustrations";
 import { SaveToast } from "@/components/SaveToast";
 
-export const Route = createFileRoute("/welcome")({
-  head: () => ({
-    meta: [
-      { title: "Welcome — CaterFlow" },
-      {
-        name: "description",
-        content: "Begin planning your celebration food in CaterFlow.",
-      },
-      { property: "og:title", content: "Welcome to CaterFlow" },
-      { property: "og:description", content: "Plan your celebration food, warmly." },
-    ],
-  }),
-  component: Welcome,
-});
-
-function Welcome() {
+export default function Welcome() {
   const { t } = useT();
   const updatedAt = usePlan((s) => s.updatedAt);
   const hydrated = usePlan((s) => s.hydrated);
@@ -76,7 +61,7 @@ function Welcome() {
               </div>
               <div className="flex flex-wrap gap-2">
                 <button
-                  onClick={() => navigate({ to: "/plan/review" })}
+                  onClick={() => navigate("/plan/review")}
                   className="rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-soft transition hover:shadow-lifted"
                 >
                   {t("continueBtn")} →
@@ -84,7 +69,7 @@ function Welcome() {
                 <button
                   onClick={() => {
                     reset();
-                    navigate({ to: "/plan/occasion" });
+                    navigate("/plan/occasion");
                   }}
                   className="rounded-full bg-card px-5 py-2.5 text-sm text-foreground hairline transition hover:shadow-soft"
                 >
@@ -97,7 +82,7 @@ function Welcome() {
               <motion.button
                 whileHover={{ y: -3 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => navigate({ to: "/plan/occasion" })}
+                onClick={() => navigate("/plan/occasion")}
                 className="rounded-full bg-primary px-7 py-4 text-base font-medium text-primary-foreground shadow-lifted"
               >
                 {t("startBtn")} →

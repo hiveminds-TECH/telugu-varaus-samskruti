@@ -1,17 +1,10 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "react-router-dom";
 import { StepShell } from "@/components/StepShell";
 import { ChoiceCard } from "@/components/ChoiceCard";
 import { useT } from "@/hooks/useT";
 import { usePlan, type Side } from "@/store/plan";
 
-export const Route = createFileRoute("/plan/side")({
-  head: () => ({
-    meta: [{ title: "Which side? — CaterFlow" }],
-  }),
-  component: SideStep,
-});
-
-function SideStep() {
+export default function SideStep() {
   const { t } = useT();
   const side = usePlan((s) => s.side);
   const setSide = usePlan((s) => s.setSide);
@@ -19,7 +12,7 @@ function SideStep() {
 
   function pick(s: Side) {
     setSide(s);
-    setTimeout(() => navigate({ to: "/plan/intro" }), 220);
+    setTimeout(() => navigate("/plan/intro"), 220);
   }
 
   const items: Array<{ id: Side; key: "brideSide" | "groomSide" | "bothSides" }> = [
@@ -36,8 +29,8 @@ function SideStep() {
       title={t("sideQ")}
       subtitle={t("sideSub")}
       back={{ to: "/plan/occasion" }}
-      next={{ onClick: () => navigate({ to: "/plan/intro" }), disabled: !side || side === "na" }}
-      skip={{ onClick: () => navigate({ to: "/plan/intro" }) }}
+      next={{ onClick: () => navigate("/plan/intro"), disabled: !side || side === "na" }}
+      skip={{ onClick: () => navigate("/plan/intro") }}
     >
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {items.map((it) => (

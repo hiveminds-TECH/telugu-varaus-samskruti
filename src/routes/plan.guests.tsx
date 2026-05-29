@@ -30,6 +30,7 @@ function GuestsStep() {
   return (
     <StepShell
       kicker="Step 6"
+      step={6}
       title={t("guestsQ")}
       subtitle={t("guestsSub")}
       back={{ to: "/plan/meals" }}

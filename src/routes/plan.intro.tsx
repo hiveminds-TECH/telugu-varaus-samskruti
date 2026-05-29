@@ -18,6 +18,7 @@ function IntroStep() {
   return (
     <StepShell
       kicker="Step 3"
+      step={3}
       title={t("introQ")}
       subtitle={t("introSub")}
       back={{ to: occasion === "wedding" ? "/plan/side" : "/plan/occasion" }}

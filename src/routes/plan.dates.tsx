@@ -30,6 +30,7 @@ function DatesStep() {
   return (
     <StepShell
       kicker="Step 4"
+      step={4}
       title={t("datesQ")}
       subtitle={t("datesSub")}
       back={{ to: "/plan/intro" }}

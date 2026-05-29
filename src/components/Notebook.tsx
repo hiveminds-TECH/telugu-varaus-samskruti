@@ -12,9 +12,9 @@ function Row({ label, value }: { label: string; value: React.ReactNode }) {
       initial={{ opacity: 0, x: 6 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="flex flex-col gap-1 border-b border-dashed border-border/70 py-3 last:border-0"
+      className="flex flex-col gap-1 border-b border-dashed border-border/80 py-3 last:border-0"
     >
-      <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+      <div className="text-[10.5px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
         {label}
       </div>
       <div className="font-serif text-lg italic text-foreground">{value}</div>
@@ -62,19 +62,58 @@ export function Notebook() {
     : null;
 
   const dates = datesInRange(p.startDate, p.endDate);
-  const hasAny =
-    p.occasion || p.name || p.startDate || p.venueType || dates.length;
+  const hasMenu =
+    dates.length > 0 &&
+    dates.some((d) => mealOrder.some((m) => (p.mealsByDay[d]?.[m]?.length ?? 0) > 0));
+
+  // Completion checklist — 6 milestones
+  const checks = [
+    !!p.occasion,
+    !!p.name.trim(),
+    dates.length > 0,
+    hasMenu,
+    p.guests > 0,
+    !!p.venueType,
+  ];
+  const completed = checks.filter(Boolean).length;
+  const pct = Math.round((completed / checks.length) * 100);
+
+  const hasAny = completed > 0;
 
   return (
-    <aside className="paper-grain relative flex h-full flex-col overflow-hidden rounded-3xl bg-card hairline shadow-soft">
-      <div className="flex items-center justify-between border-b border-dashed border-border px-6 py-5">
-        <div className="flex flex-col">
-          <span className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+    <aside
+      className="paper-grain relative flex h-full flex-col overflow-hidden rounded-3xl shadow-lifted"
+      style={{
+        backgroundColor: "var(--cream)",
+        border: "1px solid color-mix(in oklab, var(--gold) 30%, transparent)",
+      }}
+    >
+      <div className="flex items-start justify-between gap-3 border-b border-dashed border-border px-6 pt-5 pb-4">
+        <div className="flex flex-col gap-1">
+          <span className="text-[11px] font-medium uppercase tracking-[0.22em] text-primary/80">
             {t("brand")}
           </span>
-          <span className="font-display text-2xl text-foreground">{t("notebookTitle")}</span>
+          <span className="font-display text-[1.6rem] leading-tight text-foreground">
+            {t("notebookTitle")}
+          </span>
         </div>
-        <MarigoldDot className="h-5 w-5" />
+        <MarigoldDot className="mt-1 h-5 w-5 shrink-0" />
+      </div>
+
+      {/* Progress bar */}
+      <div className="border-b border-dashed border-border px-6 py-4">
+        <div className="mb-2 flex items-center justify-between text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+          <span>{completed} / {checks.length}</span>
+          <span className="font-semibold text-primary">{pct}%</span>
+        </div>
+        <div className="relative h-1.5 w-full overflow-hidden rounded-full bg-secondary">
+          <motion.div
+            className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-primary via-gold to-marigold"
+            initial={false}
+            animate={{ width: `${pct}%` }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          />
+        </div>
       </div>
 
       <div className="flex-1 overflow-y-auto px-6 py-4">
@@ -122,49 +161,46 @@ export function Notebook() {
                 }
               />
             )}
-            {dates.length > 0 &&
-              dates.some((d) =>
-                mealOrder.some((m) => (p.mealsByDay[d]?.[m]?.length ?? 0) > 0),
-              ) && (
-                <div className="pt-4">
-                  <div className="mb-2 text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
-                    {t("menuLabel")}
-                  </div>
-                  <div className="flex flex-col gap-4">
-                    {dates.map((d, di) => {
-                      const day = p.mealsByDay[d];
-                      const hasMeals = day && mealOrder.some((m) => (day[m]?.length ?? 0) > 0);
-                      if (!hasMeals) return null;
-                      return (
-                        <div key={d} className="flex flex-col gap-1.5">
-                          <div className="font-display text-base text-primary">
-                            {t("day")} {di + 1} · {format(parseISO(d), "EEE, MMM d")}
-                          </div>
-                          {mealOrder.map((m) => {
-                            const list = day[m] ?? [];
-                            if (list.length === 0) return null;
-                            return (
-                              <div key={m} className="flex gap-2 text-sm">
-                                <span className="w-20 shrink-0 text-muted-foreground">
-                                  {t(m)}
-                                </span>
-                                <span className="font-serif italic text-foreground">
-                                  {list
-                                    .map((id) => {
-                                      const lbl = findDishLabel(m, id);
-                                      return lbl ? pickLabel(lbl, lang) : id;
-                                    })
-                                    .join(", ")}
-                                </span>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      );
-                    })}
-                  </div>
+            {hasMenu && (
+              <div className="pt-4">
+                <div className="mb-2 text-[10.5px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
+                  {t("menuLabel")}
                 </div>
-              )}
+                <div className="flex flex-col gap-4">
+                  {dates.map((d, di) => {
+                    const day = p.mealsByDay[d];
+                    const hasMeals = day && mealOrder.some((m) => (day[m]?.length ?? 0) > 0);
+                    if (!hasMeals) return null;
+                    return (
+                      <div key={d} className="flex flex-col gap-1.5">
+                        <div className="font-display text-base text-primary">
+                          {t("day")} {di + 1} · {format(parseISO(d), "EEE, MMM d")}
+                        </div>
+                        {mealOrder.map((m) => {
+                          const list = day[m] ?? [];
+                          if (list.length === 0) return null;
+                          return (
+                            <div key={m} className="flex gap-2 text-sm">
+                              <span className="w-20 shrink-0 text-muted-foreground">
+                                {t(m)}
+                              </span>
+                              <span className="font-serif italic text-foreground">
+                                {list
+                                  .map((id) => {
+                                    const lbl = findDishLabel(m, id);
+                                    return lbl ? pickLabel(lbl, lang) : id;
+                                  })
+                                  .join(", ")}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

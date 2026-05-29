@@ -22,10 +22,6 @@ export const Route = createFileRoute("/plan/occasion")({
   component: OccasionStep,
 });
 
-const items: Array<{ id: Occasion; key: "wedding" | "birthday" | "housewarming" | "religious" | "corporate" | "other"; Icon: React.FC<React.SVGProps<SVGSVGElement>> }> = [
-  { id: "wedding", key: "wedding", Icon: WeddingIcon },
-  { id: "birthday", key: "birthday", Icon: BirthdayIcon },
-  { id: "housewarming", key: "housewarming", Icon: HousewarmingIcon },
 const items: Array<{
   id: Occasion;
   key: "wedding" | "birthday" | "housewarming" | "religious" | "corporate" | "other";

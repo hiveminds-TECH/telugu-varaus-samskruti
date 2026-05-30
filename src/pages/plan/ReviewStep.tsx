@@ -1,11 +1,11 @@
 import { useNavigate, Link } from "react-router-dom";
-import { format, parseISO } from "date-fns";
 import { StepShell } from "@/components/StepShell";
 import { useT, pickLabel } from "@/hooks/useT";
 import { usePlan, datesInRange } from "@/store/plan";
-import { strings } from "@/i18n/strings";
 import { findDishLabel, mealOrder } from "@/lib/meals";
+import { formatPlanDate } from "@/lib/formatDate";
 import { Underline } from "@/components/illustrations";
+import type { StringKey } from "@/i18n";
 
 function Section({
   label,
@@ -35,6 +35,20 @@ function Section({
   );
 }
 
+function venueKey(venueType: string): StringKey {
+  if (venueType === "hall") return "functionHall";
+  if (venueType === "home") return "home";
+  if (venueType === "outdoor") return "outdoor";
+  if (venueType === "temple") return "temple";
+  return "other";
+}
+
+function sideKey(side: string): StringKey {
+  if (side === "bride") return "brideSide";
+  if (side === "groom") return "groomSide";
+  return "bothSides";
+}
+
 export default function ReviewStep() {
   const { t, lang } = useT();
   const p = usePlan();
@@ -43,8 +57,7 @@ export default function ReviewStep() {
 
   return (
     <StepShell
-      kicker="Final look"
-      totalSteps={8}
+      kicker={t("reviewKicker")}
       title={t("reviewQ")}
       subtitle={t("reviewSub")}
       back={{ to: "/plan/venue" }}
@@ -63,31 +76,19 @@ export default function ReviewStep() {
         )}
         {p.occasion && (
           <Section label={t("occasionLabel")} to="/plan/occasion">
-            {pickLabel(strings[p.occasion as keyof typeof strings], lang)}
+            {t(p.occasion as StringKey)}
           </Section>
         )}
         {p.side && p.side !== "na" && (
           <Section label={t("sideLabel")} to="/plan/side">
-            {pickLabel(
-              strings[
-                (p.side === "bride"
-                  ? "brideSide"
-                  : p.side === "groom"
-                    ? "groomSide"
-                    : "bothSides") as keyof typeof strings
-              ],
-              lang,
-            )}
+            {t(sideKey(p.side))}
           </Section>
         )}
         {dates.length > 0 && (
           <Section label={t("datesLabel")} to="/plan/dates">
             {dates.length === 1
-              ? format(parseISO(dates[0]), "EEEE, MMM d")
-              : `${format(parseISO(dates[0]), "MMM d")} → ${format(
-                  parseISO(dates[dates.length - 1]),
-                  "MMM d",
-                )} · ${dates.length} ${t("day")}s`}
+              ? formatPlanDate(dates[0], lang, "long")
+              : `${formatPlanDate(dates[0], lang)} → ${formatPlanDate(dates[dates.length - 1], lang)} · ${dates.length} ${t("days")}`}
           </Section>
         )}
         {dates.length > 0 && (
@@ -112,7 +113,7 @@ export default function ReviewStep() {
                 return (
                   <div key={d} className="flex flex-col gap-1">
                     <div className="relative inline-block font-display text-lg text-primary">
-                      {t("day")} {i + 1} · {format(parseISO(d), "EEE, MMM d")}
+                      {t("day")} {i + 1} · {formatPlanDate(d, lang, "long")}
                       <Underline className="absolute -bottom-1 left-0 h-1.5 w-24 text-gold" />
                     </div>
                     {mealOrder.map((m) => {
@@ -120,9 +121,7 @@ export default function ReviewStep() {
                       if (list.length === 0) return null;
                       return (
                         <div key={m} className="flex gap-2 text-sm">
-                          <span className="w-24 shrink-0 text-muted-foreground">
-                            {t(m)}
-                          </span>
+                          <span className="w-24 shrink-0 text-muted-foreground">{t(m)}</span>
                           <span className="font-serif italic text-foreground">
                             {list
                               .map((id) => {
@@ -145,20 +144,7 @@ export default function ReviewStep() {
         </Section>
         {p.venueType && (
           <Section label={t("venueLabel")} to="/plan/venue">
-            {pickLabel(
-              strings[
-                (p.venueType === "hall"
-                  ? "functionHall"
-                  : p.venueType === "home"
-                    ? "home"
-                    : p.venueType === "outdoor"
-                      ? "outdoor"
-                      : p.venueType === "temple"
-                        ? "temple"
-                        : "other") as keyof typeof strings
-              ],
-              lang,
-            )}
+            {t(venueKey(p.venueType))}
             {p.address && (
               <div className="text-sm not-italic text-muted-foreground">{p.address}</div>
             )}

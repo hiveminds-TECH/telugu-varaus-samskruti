@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import type { ReactNode } from "react";
 import { useT } from "@/hooks/useT";
 import { Underline } from "@/components/illustrations";
@@ -39,17 +39,17 @@ export function StepShell({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -6 }}
       transition={{ duration: 0.35, ease: "easeOut" }}
-      className="mx-auto flex w-full max-w-3xl flex-col gap-7 px-5 py-8 md:py-12"
+      className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-5 py-8 md:gap-9 md:py-12"
     >
       {pct !== null && (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2.5">
           <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
             <span>
-              {t("day").toLowerCase() === "day" ? "Step" : "Step"} {step} / {totalSteps}
+              {t("step")} {step} / {totalSteps}
             </span>
             <span className="font-medium text-primary">{pct}%</span>
           </div>
-          <div className="relative h-1.5 w-full overflow-hidden rounded-full bg-secondary">
+          <div className="relative h-2 w-full overflow-hidden rounded-full bg-secondary">
             <motion.div
               className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-primary to-gold"
               initial={{ width: 0 }}
@@ -69,7 +69,7 @@ export function StepShell({
           <Underline className="absolute -bottom-2 left-0 h-2 w-32 text-gold" />
         </h1>
         {subtitle && (
-          <p className="mt-3 max-w-xl text-base text-muted-foreground md:text-lg">
+          <p className="mt-2 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
             {subtitle}
           </p>
         )}
@@ -77,7 +77,7 @@ export function StepShell({
 
       <div className="flex-1">{children}</div>
 
-      <nav className="mt-2 flex items-center justify-between gap-3 pt-4">
+      <nav className="mt-4 flex items-center justify-between gap-3 border-t border-dashed border-border/60 pt-6">
         {back ? (
           <Link
             to={back.to}
@@ -91,6 +91,7 @@ export function StepShell({
         <div className="flex items-center gap-2">
           {skip && (
             <button
+              type="button"
               onClick={skip.onClick}
               className="rounded-full px-4 py-2.5 text-sm text-muted-foreground transition hover:text-foreground"
             >
@@ -99,6 +100,7 @@ export function StepShell({
           )}
           {next && (
             <motion.button
+              type="button"
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.97 }}
               onClick={next.onClick}

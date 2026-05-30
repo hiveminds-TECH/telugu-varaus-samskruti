@@ -1,15 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { usePlan } from "@/store/plan";
-import { strings, type Lang } from "@/i18n/strings";
 import { useT } from "@/hooks/useT";
+import type { Lang } from "@/i18n";
 import { HeroIllustration, Underline, JasmineSprig } from "@/components/illustrations";
 import { SaveToast } from "@/components/SaveToast";
 
-const langs: Array<{ id: Lang; primary: string; helper: string; sample: string }> = [
-  { id: "te", primary: "తెలుగు", helper: "Pure Telugu", sample: "మీ వేడుక, మన ప్లానింగ్" },
-  { id: "ting", primary: "Tenglish", helper: "Telugu + English mix", sample: "Mee veduka, manam together plan cheddam" },
-  { id: "en", primary: "English", helper: "English only", sample: "Your celebration, planned together" },
+const langs: Array<{ id: Lang; primaryKey: "langTelugu" | "langEnglish"; helperKey: "langTeluguHelper" | "langEnglishHelper"; sampleKey: "langTeluguSample" | "langEnglishSample" }> = [
+  { id: "te", primaryKey: "langTelugu", helperKey: "langTeluguHelper", sampleKey: "langTeluguSample" },
+  { id: "en", primaryKey: "langEnglish", helperKey: "langEnglishHelper", sampleKey: "langEnglishSample" },
 ];
 
 export default function LanguagePicker() {
@@ -47,6 +46,7 @@ export default function LanguagePicker() {
             {langs.map((l) => (
               <motion.button
                 key={l.id}
+                type="button"
                 onClick={() => choose(l.id)}
                 whileHover={{ y: -3 }}
                 whileTap={{ scale: 0.98 }}
@@ -56,16 +56,10 @@ export default function LanguagePicker() {
                 }`}
               >
                 <div className="flex flex-col gap-1">
-                  <span
-                    className={`font-display text-2xl text-foreground ${l.id === "te" ? "font-te" : ""}`}
-                  >
-                    {l.primary}
-                  </span>
-                  <span className={`font-serif italic text-muted-foreground ${l.id === "te" ? "font-te not-italic" : ""}`}>
-                    {l.sample}
-                  </span>
+                  <span className="font-display text-2xl text-foreground">{t(l.primaryKey)}</span>
+                  <span className="font-serif italic text-muted-foreground">{t(l.sampleKey)}</span>
                   <span className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                    {l.helper}
+                    {t(l.helperKey)}
                   </span>
                 </div>
                 <span className="text-2xl text-primary transition-transform group-hover:translate-x-1">→</span>
@@ -83,7 +77,7 @@ export default function LanguagePicker() {
           <div className="relative w-full max-w-md rounded-[2rem] bg-card p-8 paper-grain hairline shadow-lifted">
             <HeroIllustration className="w-full" />
             <p className="mt-4 text-center font-serif text-lg italic text-muted-foreground">
-              {strings.tagline.ting}
+              {t("tagline")}
             </p>
           </div>
         </motion.div>

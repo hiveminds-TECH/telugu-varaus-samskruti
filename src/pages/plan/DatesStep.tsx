@@ -2,21 +2,23 @@ import { useNavigate } from "react-router-dom";
 import { StepShell } from "@/components/StepShell";
 import { useT } from "@/hooks/useT";
 import { usePlan, datesInRange } from "@/store/plan";
-import { format, parseISO } from "date-fns";
+import { formatPlanDateRange } from "@/lib/formatDate";
 
 function todayISO() {
   return new Date().toISOString().slice(0, 10);
 }
 
 export default function DatesStep() {
-  const { t } = useT();
+  const { t, lang } = useT();
   const startDate = usePlan((s) => s.startDate);
   const endDate = usePlan((s) => s.endDate);
+  const occasion = usePlan((s) => s.occasion);
   const setDates = usePlan((s) => s.setDates);
   const navigate = useNavigate();
 
   const min = todayISO();
   const days = datesInRange(startDate, endDate);
+  const stepNum = occasion === "wedding" ? 5 : 4;
 
   function update(s: string | null, e: string | null) {
     setDates(s ?? "", e ?? "");
@@ -24,8 +26,8 @@ export default function DatesStep() {
 
   return (
     <StepShell
-      kicker="Step 5"
-      step={5}
+      kicker={t("stepKicker", { step: stepNum })}
+      step={stepNum}
       totalSteps={8}
       title={t("datesQ")}
       subtitle={t("datesSub")}
@@ -66,12 +68,7 @@ export default function DatesStep() {
         {days.length > 0 && (
           <div className="rounded-2xl bg-gold-soft/40 p-4 paper-grain">
             <p className="font-serif italic text-foreground">
-              {days.length === 1
-                ? `ఒక్క రోజు — ${format(parseISO(days[0]), "EEEE, MMMM d")} 🌿`
-                : `${days.length} రోజులు — ${format(parseISO(days[0]), "MMM d")} నుండి ${format(
-                    parseISO(days[days.length - 1]),
-                    "MMM d",
-                  )} వరకు 🌿`}
+              {formatPlanDateRange(days, lang, t)}
             </p>
           </div>
         )}

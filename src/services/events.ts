@@ -1,8 +1,10 @@
 import { apiClient } from "./api";
 
+import type { Lang } from "@/i18n";
+
 export interface EventPlan {
   id?: string;
-  language: "te" | "ting" | "en";
+  language: Lang;
   occasion: string;
   side?: string;
   name: string;

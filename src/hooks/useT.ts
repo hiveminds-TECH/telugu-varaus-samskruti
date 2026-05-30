@@ -1,19 +1,11 @@
 import { usePlan } from "@/store/plan";
-import { strings, type Lang, type StringKey } from "@/i18n/strings";
+import { translate, pickLabel, type Lang, type StringKey } from "@/i18n";
 
 export function useT() {
   const lang = usePlan((s) => s.language);
-  const t = (key: StringKey) => {
-    const entry = strings[key];
-    if (!entry) return String(key);
-    return entry[lang] ?? entry.ting;
-  };
+  const t = (key: StringKey, params?: Record<string, string | number>) =>
+    translate(lang, key, params);
   return { t, lang: lang as Lang };
 }
 
-export function pickLabel<T extends { te: string; ting: string; en: string }>(
-  obj: T,
-  lang: Lang,
-): string {
-  return obj[lang] ?? obj.ting;
-}
+export { pickLabel };

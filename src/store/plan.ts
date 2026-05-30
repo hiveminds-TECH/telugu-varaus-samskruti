@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { Lang } from "@/i18n/strings";
+import { normalizeLang, type Lang } from "@/i18n";
 
 export type Occasion =
   | "wedding"
@@ -125,6 +125,14 @@ export const usePlan = create<PlanState>()(
     }),
     {
       name: "caterflow:v1",
+      merge: (persisted, current) => {
+        const p = persisted as Partial<PlanState> | undefined;
+        return {
+          ...current,
+          ...p,
+          language: normalizeLang(p?.language),
+        };
+      },
       onRehydrateStorage: () => (state) => {
         state?.markHydrated();
       },

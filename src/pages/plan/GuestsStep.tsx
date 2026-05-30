@@ -7,7 +7,10 @@ export default function GuestsStep() {
   const { t } = useT();
   const guests = usePlan((s) => s.guests);
   const setGuests = usePlan((s) => s.setGuests);
+  const occasion = usePlan((s) => s.occasion);
   const navigate = useNavigate();
+
+  const stepNum = occasion === "wedding" ? 7 : 6;
 
   function bump(delta: number) {
     setGuests(Math.max(10, Math.min(2000, guests + delta)));
@@ -15,17 +18,17 @@ export default function GuestsStep() {
 
   const playful =
     guests < 50
-      ? "Chinna gathering 🌿"
+      ? t("guestsSmall")
       : guests < 150
-        ? "Family + close friends 💛"
+        ? t("guestsMedium")
         : guests < 400
-          ? "Pedda function 🌸"
-          : "Mega celebration 🎉";
+          ? t("guestsLarge")
+          : t("guestsMega");
 
   return (
     <StepShell
-      kicker="Step 7"
-      step={7}
+      kicker={t("stepKicker", { step: stepNum })}
+      step={stepNum}
       totalSteps={8}
       title={t("guestsQ")}
       subtitle={t("guestsSub")}
@@ -35,7 +38,9 @@ export default function GuestsStep() {
       <div className="mx-auto flex max-w-md flex-col items-center gap-6">
         <div className="flex w-full items-center justify-center gap-4 rounded-3xl bg-card p-6 paper-grain hairline shadow-soft">
           <button
+            type="button"
             onClick={() => bump(-10)}
+            aria-label="-10"
             className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary text-2xl text-foreground transition hover:shadow-soft"
           >
             −
@@ -45,7 +50,9 @@ export default function GuestsStep() {
             <span className="font-serif italic text-muted-foreground">{t("guestsUnit")}</span>
           </div>
           <button
+            type="button"
             onClick={() => bump(10)}
+            aria-label="+10"
             className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-2xl text-primary-foreground transition hover:shadow-soft"
           >
             +
@@ -59,6 +66,7 @@ export default function GuestsStep() {
           step={10}
           value={Math.min(guests, 1000)}
           onChange={(e) => setGuests(Number(e.target.value))}
+          aria-label={t("guestsQ")}
           className="w-full accent-primary"
         />
 

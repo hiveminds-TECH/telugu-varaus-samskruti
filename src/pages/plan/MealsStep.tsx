@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { format, parseISO } from "date-fns";
 import { StepShell } from "@/components/StepShell";
 import { DishCard } from "@/components/DishCard";
 import { useT, pickLabel } from "@/hooks/useT";
 import { usePlan, datesInRange, type MealKey } from "@/store/plan";
 import { mealCatalog, mealOrder } from "@/lib/meals";
+import { formatPlanDate } from "@/lib/formatDate";
 import {
   IdliIcon,
   DosaIcon,
@@ -70,6 +70,7 @@ export default function MealsStep() {
   const { t, lang } = useT();
   const startDate = usePlan((s) => s.startDate);
   const endDate = usePlan((s) => s.endDate);
+  const occasion = usePlan((s) => s.occasion);
   const mealsByDay = usePlan((s) => s.mealsByDay);
   const toggleDish = usePlan((s) => s.toggleDish);
   const addCustomDish = usePlan((s) => s.addCustomDish);
@@ -91,6 +92,8 @@ export default function MealsStep() {
     dinner: "",
   });
 
+  const stepNum = occasion === "wedding" ? 6 : 5;
+
   if (days.length === 0) {
     return (
       <StepShell
@@ -98,7 +101,7 @@ export default function MealsStep() {
         back={{ to: "/plan/dates" }}
         next={{ onClick: () => navigate("/plan/dates"), label: t("startDate") }}
       >
-        <p className="text-muted-foreground">పహిల dates select cheyandi.</p>
+        <p className="text-muted-foreground">{t("mealsNoDates")}</p>
       </StepShell>
     );
   }
@@ -113,8 +116,8 @@ export default function MealsStep() {
 
   return (
     <StepShell
-      kicker="Step 6"
-      step={6}
+      kicker={t("stepKicker", { step: stepNum })}
+      step={stepNum}
       totalSteps={8}
       title={t("mealsQ")}
       subtitle={t("mealsSub")}
@@ -127,6 +130,7 @@ export default function MealsStep() {
             {days.map((d, i) => (
               <button
                 key={d}
+                type="button"
                 onClick={() => setActiveDay(d)}
                 className={`rounded-full px-4 py-2 text-sm transition ${
                   day === d
@@ -134,7 +138,7 @@ export default function MealsStep() {
                     : "bg-card text-foreground hairline hover:shadow-soft"
                 }`}
               >
-                రోజు {i + 1} · {format(parseISO(d), "EEE")}
+                {t("dayTab", { num: i + 1, weekday: formatPlanDate(d, lang, "weekday") })}
               </button>
             ))}
           </div>
@@ -153,6 +157,7 @@ export default function MealsStep() {
                 className="overflow-hidden rounded-2xl bg-card hairline shadow-soft"
               >
                 <button
+                  type="button"
                   onClick={() => setOpenMeal(isOpen ? null : meal)}
                   className="flex w-full items-center justify-between gap-3 px-5 py-4 text-left"
                 >
@@ -160,7 +165,7 @@ export default function MealsStep() {
                     <span className="font-display text-xl text-foreground">{t(meal)}</span>
                     {selected.length > 0 && (
                       <span className="text-xs uppercase tracking-[0.15em] text-muted-foreground">
-                        {selected.length} selected
+                        {t("selectedCount", { count: selected.length })}
                       </span>
                     )}
                   </div>
@@ -181,6 +186,7 @@ export default function MealsStep() {
                             {categories.map((c) => (
                               <button
                                 key={c.id}
+                                type="button"
                                 onClick={() =>
                                   setActiveCategory((prev) => ({ ...prev, [meal]: c.id }))
                                 }
@@ -223,6 +229,7 @@ export default function MealsStep() {
                             className="flex-1 rounded-lg bg-card px-3 py-2 text-sm text-foreground hairline focus:outline-none focus:ring-2 focus:ring-primary"
                           />
                           <button
+                            type="button"
                             onClick={() => {
                               if (!custom[meal].trim()) return;
                               addCustomDish(day, meal, custom[meal]);
@@ -243,13 +250,14 @@ export default function MealsStep() {
                                 (s) =>
                                   !categories.some((c) => c.dishes.some((d) => d.id === s)),
                               )
-                              .map((custom) => (
+                              .map((customDish) => (
                                 <button
-                                  key={custom}
-                                  onClick={() => toggleDish(day, meal, custom)}
+                                  key={customDish}
+                                  type="button"
+                                  onClick={() => toggleDish(day, meal, customDish)}
                                   className="group flex items-center gap-2 rounded-full bg-gold-soft px-3 py-1.5 text-sm text-foreground"
                                 >
-                                  {custom} <span className="text-muted-foreground">×</span>
+                                  {customDish} <span className="text-muted-foreground">×</span>
                                 </button>
                               ))}
                           </div>

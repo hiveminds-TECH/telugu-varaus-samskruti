@@ -29,12 +29,15 @@ export default function VenueStep() {
   const setVenue = usePlan((s) => s.setVenue);
   const address = usePlan((s) => s.address);
   const setAddress = usePlan((s) => s.setAddress);
+  const occasion = usePlan((s) => s.occasion);
   const navigate = useNavigate();
+
+  const stepNum = occasion === "wedding" ? 8 : 7;
 
   return (
     <StepShell
-      kicker="Step 8"
-      step={8}
+      kicker={t("stepKicker", { step: stepNum })}
+      step={stepNum}
       totalSteps={8}
       title={t("venueQ")}
       subtitle={t("venueSub")}
@@ -61,6 +64,7 @@ export default function VenueStep() {
           value={address}
           onChange={(e) => setAddress(e.target.value)}
           placeholder={t("addressPlaceholder")}
+          aria-label={t("addressPlaceholder")}
           rows={3}
           className="w-full rounded-2xl bg-card px-5 py-4 text-base text-foreground hairline shadow-soft focus:outline-none focus:ring-2 focus:ring-primary"
         />

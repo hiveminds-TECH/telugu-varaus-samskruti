@@ -23,7 +23,7 @@ export default function SideStep() {
 
   return (
     <StepShell
-      kicker="Step 2"
+      kicker={t("stepKicker", { step: 2 })}
       step={2}
       totalSteps={8}
       title={t("sideQ")}

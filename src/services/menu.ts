@@ -2,7 +2,7 @@ import { apiClient } from "./api";
 
 export interface Dish {
   id: string;
-  label: { te: string; ting: string; en: string };
+  label: { te: string; en: string };
   isVeg?: boolean;
   popular?: boolean;
   cuisine?: string;
@@ -10,7 +10,7 @@ export interface Dish {
 
 export interface MealCategory {
   id: string;
-  label: { te: string; ting: string; en: string };
+  label: { te: string; en: string };
   dishes: Dish[];
 }
 

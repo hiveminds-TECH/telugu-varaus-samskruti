@@ -4,21 +4,14 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Notebook } from "@/components/Notebook";
 import { SaveToast } from "@/components/SaveToast";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useT } from "@/hooks/useT";
 import { JasmineSprig } from "@/components/illustrations";
-import { usePlan } from "@/store/plan";
-import type { Lang } from "@/i18n/strings";
 
 export default function Layout() {
-  const { t, lang: language } = useT();
-  const setLanguage = usePlan((s) => s.setLanguage);
+  const { t } = useT();
   const [showNote, setShowNote] = useState(false);
   const location = useLocation();
-
-  function cycleLang() {
-    const next: Lang = language === "te" ? "ting" : language === "ting" ? "en" : "te";
-    setLanguage(next);
-  }
 
   return (
     <div className="relative min-h-screen bg-background">
@@ -30,21 +23,17 @@ export default function Layout() {
         </Link>
         <div className="flex items-center gap-2">
           <button
+            type="button"
             onClick={() => setShowNote((v) => !v)}
             className="rounded-full bg-card px-4 py-2 text-xs uppercase tracking-[0.18em] text-muted-foreground hairline transition hover:text-foreground md:hidden"
           >
             {t("notebookTitle")}
           </button>
-          <button
-            onClick={cycleLang}
-            className="rounded-full bg-card px-4 py-2 text-xs uppercase tracking-[0.18em] text-muted-foreground hairline transition hover:text-foreground"
-          >
-            {language === "te" ? "తెలుగు" : language === "ting" ? "Tenglish" : "English"}
-          </button>
+          <LanguageSwitcher />
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-6 pb-10 md:grid-cols-[minmax(0,1fr)_400px] md:gap-10">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-6 pb-10 md:grid-cols-[minmax(0,1fr)_380px] md:gap-10 lg:grid-cols-[minmax(0,1fr)_420px]">
         <main className="min-h-[calc(100vh-120px)]">
           <AnimatePresence mode="wait">
             <motion.div key={location.pathname} className="h-full">
@@ -57,7 +46,6 @@ export default function Layout() {
         </div>
       </div>
 
-      {/* Mobile notebook drawer */}
       <AnimatePresence>
         {showNote && (
           <motion.div
@@ -72,10 +60,19 @@ export default function Layout() {
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 28, stiffness: 220 }}
-              className="absolute inset-x-0 bottom-0 h-[80vh] p-4"
+              className="absolute inset-x-0 bottom-0 flex h-[85vh] flex-col p-4"
               onClick={(e) => e.stopPropagation()}
             >
-              <Notebook />
+              <button
+                type="button"
+                onClick={() => setShowNote(false)}
+                className="mb-3 self-center rounded-full bg-card px-5 py-2 text-xs uppercase tracking-[0.18em] text-muted-foreground hairline"
+              >
+                {t("closeNotebook")}
+              </button>
+              <div className="min-h-0 flex-1">
+                <Notebook />
+              </div>
             </motion.div>
           </motion.div>
         )}

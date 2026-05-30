@@ -1,12 +1,12 @@
 import { motion } from "framer-motion";
-import { format, parseISO } from "date-fns";
 import { usePlan, datesInRange } from "@/store/plan";
 import { useT, pickLabel } from "@/hooks/useT";
 import { findDishLabel, mealOrder } from "@/lib/meals";
-import { strings } from "@/i18n/strings";
+import { formatPlanDate } from "@/lib/formatDate";
 import { JasmineSprig, MarigoldDot } from "@/components/illustrations";
+import type { StringKey } from "@/i18n";
 
-function Row({ label, value }: { label: string; value: React.ReactNode }) {
+function Row({ label, value, done }: { label: string; value: React.ReactNode; done?: boolean }) {
   return (
     <motion.div
       initial={{ opacity: 0, x: 6 }}
@@ -14,71 +14,63 @@ function Row({ label, value }: { label: string; value: React.ReactNode }) {
       transition={{ duration: 0.3, ease: "easeOut" }}
       className="flex flex-col gap-1 border-b border-dashed border-border/80 py-3 last:border-0"
     >
-      <div className="text-[10.5px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
-        {label}
+      <div className="flex items-center gap-2">
+        <span
+          className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-[9px] ${
+            done ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground"
+          }`}
+        >
+          {done ? "✓" : ""}
+        </span>
+        <div className="text-[10.5px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
+          {label}
+        </div>
       </div>
-      <div className="font-serif text-lg italic text-foreground">{value}</div>
+      <div className="pl-6 font-serif text-lg italic text-foreground">{value}</div>
     </motion.div>
   );
+}
+
+function venueKey(venueType: string): StringKey {
+  if (venueType === "hall") return "functionHall";
+  if (venueType === "home") return "home";
+  if (venueType === "outdoor") return "outdoor";
+  if (venueType === "temple") return "temple";
+  return "other";
+}
+
+function sideKey(side: string): StringKey {
+  if (side === "bride") return "brideSide";
+  if (side === "groom") return "groomSide";
+  return "bothSides";
 }
 
 export function Notebook() {
   const { t, lang } = useT();
   const p = usePlan();
 
-  const occasionLabel = p.occasion
-    ? pickLabel(strings[p.occasion as keyof typeof strings], lang)
-    : null;
-
-  const sideLabel =
-    p.side && p.side !== "na"
-      ? pickLabel(
-          strings[
-            (p.side === "bride"
-              ? "brideSide"
-              : p.side === "groom"
-                ? "groomSide"
-                : "bothSides") as keyof typeof strings
-          ],
-          lang,
-        )
-      : null;
-
-  const venueLabel = p.venueType
-    ? pickLabel(
-        strings[
-          (p.venueType === "hall"
-            ? "functionHall"
-            : p.venueType === "home"
-              ? "home"
-              : p.venueType === "outdoor"
-                ? "outdoor"
-                : p.venueType === "temple"
-                  ? "temple"
-                  : "other") as keyof typeof strings
-        ],
-        lang,
-      )
-    : null;
-
   const dates = datesInRange(p.startDate, p.endDate);
   const hasMenu =
     dates.length > 0 &&
     dates.some((d) => mealOrder.some((m) => (p.mealsByDay[d]?.[m]?.length ?? 0) > 0));
 
-  // Completion checklist — 6 milestones
-  const checks = [
-    !!p.occasion,
-    !!p.name.trim(),
-    !!p.mobile.trim(),
-    dates.length > 0,
-    hasMenu,
-    p.guests > 0,
-    !!p.venueType,
+  const milestones = [
+    { key: "occasionLabel" as const, done: !!p.occasion, value: p.occasion ? t(p.occasion as StringKey) : null },
+    { key: "sideLabel" as const, done: !!p.side && p.side !== "na", value: p.side && p.side !== "na" ? t(sideKey(p.side)) : null },
+    { key: "nameLabel" as const, done: !!p.name.trim(), value: p.name.trim() || null },
+    { key: "mobileLabel" as const, done: p.mobile.length === 10, value: p.mobile || null },
+    { key: "datesLabel" as const, done: dates.length > 0, value: dates.length > 0
+      ? dates.length === 1
+        ? formatPlanDate(dates[0], lang, "long")
+        : `${formatPlanDate(dates[0], lang)} → ${formatPlanDate(dates[dates.length - 1], lang)} · ${dates.length} ${t("days")}`
+      : null },
+    { key: "guestsLabel" as const, done: p.guests > 0, value: p.guests > 0 ? `~${p.guests} ${t("guestsUnit")}` : null },
+    { key: "venueLabel" as const, done: !!p.venueType, value: p.venueType ? t(venueKey(p.venueType)) : null },
+    { key: "menuLabel" as const, done: hasMenu, value: hasMenu ? t("menuLabel") : null },
   ];
-  const completed = checks.filter(Boolean).length;
-  const pct = Math.round((completed / checks.length) * 100);
 
+  const completed = milestones.filter((m) => m.done).length;
+  const pct = Math.round((completed / milestones.length) * 100);
   const hasAny = completed > 0;
 
   return (
@@ -101,13 +93,15 @@ export function Notebook() {
         <MarigoldDot className="mt-1 h-5 w-5 shrink-0" />
       </div>
 
-      {/* Progress bar */}
       <div className="border-b border-dashed border-border px-6 py-4">
         <div className="mb-2 flex items-center justify-between text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-          <span>{completed} / {checks.length}</span>
-          <span className="font-semibold text-primary">{pct}%</span>
+          <span>{t("notebookProgress")}</span>
+          <span>
+            {t("progressComplete", { completed, total: milestones.length })} ·{" "}
+            <span className="font-semibold text-primary">{pct}%</span>
+          </span>
         </div>
-        <div className="relative h-1.5 w-full overflow-hidden rounded-full bg-secondary">
+        <div className="relative h-2 w-full overflow-hidden rounded-full bg-secondary">
           <motion.div
             className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-primary via-gold to-marigold"
             initial={false}
@@ -128,82 +122,78 @@ export function Notebook() {
           </div>
         ) : (
           <div>
-            {p.name && <Row label={t("nameLabel")} value={p.name} />}
-            {p.mobile && <Row label={t("mobileLabel")} value={p.mobile} />}
-            {occasionLabel && <Row label={t("occasionLabel")} value={occasionLabel} />}
-            {occasionLabel && <Row label={t("occasionLabel")} value={occasionLabel} />}
-            {sideLabel && <Row label={t("sideLabel")} value={sideLabel} />}
-            {dates.length > 0 && (
-              <Row
-                label={t("datesLabel")}
-                value={
-                  dates.length === 1
-                    ? format(parseISO(dates[0]), "EEE, MMM d")
-                    : `${format(parseISO(dates[0]), "MMM d")} → ${format(
-                        parseISO(dates[dates.length - 1]),
-                        "MMM d",
-                      )} · ${dates.length} ${t("day")}s`
-                }
-              />
-            )}
-            {p.guests > 0 && (p.venueType || dates.length > 0) && (
-              <Row label={t("guestsLabel")} value={`~${p.guests} ${t("guestsUnit")}`} />
-            )}
-            {venueLabel && (
-              <Row
-                label={t("venueLabel")}
-                value={
-                  <span>
-                    {venueLabel}
-                    {p.address && (
-                      <span className="block text-sm not-italic text-muted-foreground">
-                        {p.address}
+            {milestones.map((m) => {
+              if (!m.value && !m.done) return null;
+              if (m.key === "menuLabel" && hasMenu) {
+                return (
+                  <div key={m.key} className="border-b border-dashed border-border/80 py-3">
+                    <div className="mb-3 flex items-center gap-2">
+                      <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-primary text-[9px] text-primary-foreground">
+                        ✓
                       </span>
-                    )}
-                  </span>
-                }
-              />
-            )}
-            {hasMenu && (
-              <div className="pt-4">
-                <div className="mb-2 text-[10.5px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
-                  {t("menuLabel")}
-                </div>
-                <div className="flex flex-col gap-4">
-                  {dates.map((d, di) => {
-                    const day = p.mealsByDay[d];
-                    const hasMeals = day && mealOrder.some((m) => (day[m]?.length ?? 0) > 0);
-                    if (!hasMeals) return null;
-                    return (
-                      <div key={d} className="flex flex-col gap-1.5">
-                        <div className="font-display text-base text-primary">
-                          {t("day")} {di + 1} · {format(parseISO(d), "EEE, MMM d")}
-                        </div>
-                        {mealOrder.map((m) => {
-                          const list = day[m] ?? [];
-                          if (list.length === 0) return null;
-                          return (
-                            <div key={m} className="flex gap-2 text-sm">
-                              <span className="w-20 shrink-0 text-muted-foreground">
-                                {t(m)}
-                              </span>
-                              <span className="font-serif italic text-foreground">
-                                {list
-                                  .map((id) => {
-                                    const lbl = findDishLabel(m, id);
-                                    return lbl ? pickLabel(lbl, lang) : id;
-                                  })
-                                  .join(", ")}
-                              </span>
-                            </div>
-                          );
-                        })}
+                      <div className="text-[10.5px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
+                        {t(m.key)}
                       </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
+                    </div>
+                    <div className="flex flex-col gap-4 pl-6 pt-2">
+                      {dates.map((d, di) => {
+                        const day = p.mealsByDay[d];
+                        const hasMeals = day && mealOrder.some((me) => (day[me]?.length ?? 0) > 0);
+                        if (!hasMeals) return null;
+                        return (
+                          <div key={d} className="flex flex-col gap-1.5">
+                            <div className="font-display text-base text-primary">
+                              {t("day")} {di + 1} · {formatPlanDate(d, lang, "long")}
+                            </div>
+                            {mealOrder.map((me) => {
+                              const list = day[me] ?? [];
+                              if (list.length === 0) return null;
+                              return (
+                                <div key={me} className="flex gap-2 text-sm">
+                                  <span className="w-20 shrink-0 text-muted-foreground">
+                                    {t(me)}
+                                  </span>
+                                  <span className="font-serif italic text-foreground">
+                                    {list
+                                      .map((id) => {
+                                        const lbl = findDishLabel(me, id);
+                                        return lbl ? pickLabel(lbl, lang) : id;
+                                      })
+                                      .join(", ")}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              }
+              if (m.key === "menuLabel") return null;
+              if (m.key === "venueLabel" && p.venueType) {
+                return (
+                  <Row
+                    key={m.key}
+                    label={t(m.key)}
+                    done={m.done}
+                    value={
+                      <span>
+                        {t(venueKey(p.venueType!))}
+                        {p.address && (
+                          <span className="block text-sm not-italic text-muted-foreground">
+                            {p.address}
+                          </span>
+                        )}
+                      </span>
+                    }
+                  />
+                );
+              }
+              if (!m.value) return null;
+              return <Row key={m.key} label={t(m.key)} value={m.value} done={m.done} />;
+            })}
           </div>
         )}
       </div>

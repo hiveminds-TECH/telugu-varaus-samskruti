@@ -8,8 +8,12 @@ export default function MobileStep() {
   const { t } = useT();
   const mobile = usePlan((s) => s.mobile);
   const setMobile = usePlan((s) => s.setMobile);
+  const occasion = usePlan((s) => s.occasion);
   const navigate = useNavigate();
   const [error, setError] = useState("");
+  const [touched, setTouched] = useState(false);
+
+  const stepNum = occasion === "wedding" ? 4 : 3;
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const val = e.target.value.replace(/\D/g, "").slice(0, 10);
@@ -18,6 +22,7 @@ export default function MobileStep() {
   }
 
   function handleNext() {
+    setTouched(true);
     if (mobile.length !== 10) {
       setError(t("mobileError"));
       return;
@@ -25,10 +30,12 @@ export default function MobileStep() {
     navigate("/plan/dates");
   }
 
+  const showError = touched && mobile.length > 0 && mobile.length !== 10;
+
   return (
     <StepShell
-      kicker="Step 4"
-      step={4}
+      kicker={t("stepKicker", { step: stepNum })}
+      step={stepNum}
       totalSteps={8}
       title={t("mobileQ")}
       subtitle={t("mobileSub")}
@@ -44,19 +51,26 @@ export default function MobileStep() {
             type="tel"
             value={mobile}
             onChange={handleChange}
+            onBlur={() => setTouched(true)}
             placeholder={t("mobilePlaceholder")}
+            aria-label={t("mobilePlaceholder")}
+            aria-invalid={showError || !!error}
             inputMode="numeric"
+            pattern="[0-9]*"
+            autoComplete="tel"
             maxLength={10}
-            className="w-full rounded-2xl bg-card px-6 py-5 text-2xl font-display text-foreground placeholder:text-muted-foreground/60 hairline shadow-soft focus:outline-none focus:ring-2 focus:ring-primary"
+            className={`w-full rounded-2xl bg-card px-6 py-5 text-2xl font-display tracking-widest text-foreground placeholder:text-muted-foreground/60 placeholder:tracking-normal hairline shadow-soft focus:outline-none focus:ring-2 ${
+              showError || error ? "ring-2 ring-red-500/60" : "focus:ring-primary"
+            }`}
             autoFocus
           />
-          {error && (
-            <p className="text-sm text-red-600 font-medium">{error}</p>
+          {(error || showError) && (
+            <p role="alert" className="text-sm font-medium text-red-600">
+              {error || t("mobileError")}
+            </p>
           )}
           {mobile.length === 10 && !error && (
-            <p className="font-serif italic text-muted-foreground">
-              Chala bagundi 🌿 — next step lo dates select cheskondi.
-            </p>
+            <p className="font-serif italic text-muted-foreground">{t("mobileConfirmation")}</p>
           )}
         </div>
       </div>
